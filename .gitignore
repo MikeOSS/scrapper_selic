@@ -5,3 +5,7 @@
 **/.next/
 backend/.env
 frontend/.env.local
+.env.local
+
+.vercel
+.env*
