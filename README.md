@@ -5,7 +5,7 @@ Aplicação para comparar produtos de renda fixa, consultar SELIC/IPCA no Banco 
 ## O que o projeto faz
 
 - Consulta SELIC e IPCA diretamente na API pública SGS do Banco Central.
-- Mantém um catálogo normalizado de produtos de renda fixa com emissor, taxa, vencimento, liquidez, FGC e link da fonte.
+- Atualiza o catálogo com taxas e preços públicos diários de compra do Tesouro Direto, incluindo emissor, vencimento, preço mínimo e fonte.
 - Calcula retorno líquido estimado, retorno real estimado, risco e adequação ao perfil antes de usar IA.
 - Usa Gemini apenas para transformar os dados calculados em uma explicação; a recomendação não depende de uma resposta não verificável do modelo.
 - Expõe uma rotina de atualização preparada para conectores de bancos. Cada conector deve respeitar os termos de uso e a origem pública do banco.
@@ -14,7 +14,7 @@ Aplicação para comparar produtos de renda fixa, consultar SELIC/IPCA no Banco 
 
 ## Limite importante sobre "todos os bancos"
 
-Não existe uma API pública única com todos os produtos de renda fixa de todos os bancos brasileiros. Por isso, o projeto traz um catálogo inicial e uma arquitetura de conectores. Para cobertura real, implemente/registre conectores por instituição com fontes permitidas, ou conecte um provedor de mercado licenciado. O sistema sempre mostra a URL e o horário de coleta de cada opção.
+Não existe uma API pública única com as ofertas de todos os bancos brasileiros. O catálogo atual usa os dados abertos oficiais do Tesouro Transparente; Selic e IPCA vêm das séries SGS do Banco Central. Ofertas de CDB, LCI e LCA de cada banco exigem fontes públicas verificáveis ou integração autorizada com um provedor. O sistema mostra a fonte e a data-base das taxas.
 
 ## Executar
 
@@ -42,8 +42,8 @@ Abra `http://localhost:3000`. A API roda em `http://localhost:8080`.
 
 - `GET /api/market/indicators`
 - `GET /api/products`
-- `POST /api/recommendations` — corpo: `{ amount, horizonMonths, riskProfile, liquidityNeed }`
-- `POST /api/admin/refresh` — atualiza indicadores e executa conectores habilitados
+- `POST /api/recommendations` — corpo: `{ amount, horizonMonths, riskProfile, maxLiquidityDays }`
+- `POST /api/admin/refresh` — atualiza indicadores do BCB e taxas do Tesouro Direto
 
 O backend aceita `GEMINI_API_KEY` como variável do sistema; para desenvolvimento local também lê `backend/.env`.
 

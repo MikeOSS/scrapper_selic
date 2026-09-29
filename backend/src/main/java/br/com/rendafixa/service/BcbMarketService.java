@@ -18,9 +18,9 @@ public class BcbMarketService {
     MarketIndicators saved = cache.get();
     if (saved != null && saved.updatedAt().plusMinutes(15).isAfter(OffsetDateTime.now())) return saved;
     try {
-      // SGS 432 = meta SELIC anual; 433 = IPCA acumulado em 12 meses.
+      // SGS 432 = meta SELIC anual; 13522 = IPCA acumulado em 12 meses.
       BigDecimal selic = readSeries(432);
-      BigDecimal ipca = readSeries(433);
+      BigDecimal ipca = readSeries(13522);
       MarketIndicators fresh = new MarketIndicators(selic, ipca, OffsetDateTime.now(), "Banco Central do Brasil (SGS)", true);
       cache.set(fresh);
       return fresh;

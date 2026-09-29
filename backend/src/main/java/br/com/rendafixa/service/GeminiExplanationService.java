@@ -22,12 +22,18 @@ public class GeminiExplanationService {
   public String explain(RecommendationRequest request, InvestmentProduct product, String rationale, int riskScore) {
     String key = configuredKey == null || configuredKey.isBlank() ? localKey() : configuredKey;
     if (key == null || key.isBlank()) return "Análise por IA indisponível: configure GEMINI_API_KEY no ambiente do backend.";
+    String rateLabel = switch (product.rateIndex()) {
+      case CDI -> product.annualRate() + "% do CDI";
+      case SELIC -> "Selic + " + product.annualRate() + "% a.a.";
+      case PREFIXED -> product.annualRate() + "% a.a. prefixados";
+      case IPCA_PLUS -> "IPCA + " + product.annualRate() + "% a.a.";
+    };
     String prompt = "Você é um assistente educacional de renda fixa no Brasil. Não dê ordem de compra nem promessa de retorno. "
         + "Explique em até 90 palavras, em português, a recomendação calculada. Aporte: R$ " + request.amount()
         + "; prazo: " + request.horizonMonths() + " meses; perfil: " + request.riskProfile()
-        + "; produto: " + product.bank() + " — " + product.name() + "; taxa: " + product.annualRate() + " " + product.rateIndex()
+        + "; produto: " + product.bank() + " — " + product.name() + "; taxa: " + rateLabel
         + "; risco calculado: " + riskScore + "/100. Critérios: " + rationale
-        + ". Cite liquidez, FGC e necessidade de confirmar taxa/vencimento na fonte.";
+        + ". Cite liquidez, garantia aplicavel e confirme a taxa e o vencimento na fonte oficial.";
     try {
       Map<String, Object> body = Map.of("contents", new Object[]{Map.of("parts", new Object[]{Map.of("text", prompt)})},
           "generationConfig", Map.of("thinkingConfig", Map.of("thinkingLevel", "minimal")));

@@ -58,7 +58,7 @@ export default function Home() {
   return <main>
     <section className="metrics">
       <Metric label="SELIC anual" value={indicators ? `${indicators.selicAnnual.toLocaleString("pt-BR")}%` : "—"} note={indicators?.live ? "Atualizado pelo BCB" : "Dados em cache / indisponíveis"} />
-      <Metric label="IPCA (12 meses)" value={indicators ? `${indicators.ipcaAnnual.toLocaleString("pt-BR")}%` : "—"} note="Série SGS 433" />
+      <Metric label="IPCA (12 meses)" value={indicators ? `${indicators.ipcaAnnual.toLocaleString("pt-BR")}%` : "—"} note="Série SGS 13522" />
       <Metric label="Produtos no catálogo" value={String(products.length)} note="Confirme a oferta no emissor" />
     </section>
 
@@ -104,14 +104,14 @@ export default function Home() {
     </section>
 
     <section className="catalog">
-      <div><span className="eyebrow">CATÁLOGO</span><h2>Opções de referência</h2></div>
+      <div><span className="eyebrow">CATÁLOGO OFICIAL</span><h2>Títulos do Tesouro Direto</h2></div>
       <div className="table-wrap"><table>
-        <thead><tr><th>Instituição / produto</th><th>Remuneração</th><th>Liquidez</th><th>FGC</th><th>Fonte</th></tr></thead>
+        <thead><tr><th>Emissor / título</th><th>Remuneração</th><th>Liquidez</th><th>Garantia</th><th>Fonte e data-base</th></tr></thead>
         <tbody>{products.map(product => <tr key={product.id}>
           <td><b>{product.bank}</b><br /><small>{product.name} · mínimo {currency.format(product.minimumInvestment)}</small></td>
           <td>{product.annualRate}% {formatIndex(product.rateIndex)}</td>
           <td>{product.liquidityDays === 0 ? "Diária" : `${product.liquidityDays} dias`}</td>
-          <td>{product.fgcCovered ? "Coberto*" : "Não"}</td>
+          <td>{product.type === "TESOURO_DIRETO" ? "Tesouro Nacional" : product.fgcCovered ? "Coberto*" : "Não"}</td>
           <td><a href={product.sourceUrl} target="_blank" rel="noreferrer">Ver oferta ↗</a><br /><small>{product.sourceStatus}</small></td>
         </tr>)}</tbody>
       </table></div>

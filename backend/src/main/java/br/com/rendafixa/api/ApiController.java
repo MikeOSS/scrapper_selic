@@ -16,7 +16,7 @@ public class ApiController {
   @GetMapping("/products") public List<InvestmentProduct> products() { return catalog.all(); }
   @GetMapping("/health") public Map<String, String> health() { return Map.of("status", "UP"); }
   @PostMapping("/recommendations") public RecommendationResponse recommend(@Valid @RequestBody RecommendationRequest request) { return recommendations.recommend(request); }
-  @PostMapping("/admin/refresh") public Map<String, Object> refresh() { return Map.of("indicators", market.refresh(), "products", catalog.all().size(), "message", "Indicadores atualizados. Produtos exigem conectores autorizados por instituição."); }
+  @PostMapping("/admin/refresh") public Map<String, Object> refresh() { return Map.of("indicators", market.refresh(), "products", catalog.refresh(), "message", "Indicadores do BCB e títulos oficiais do Tesouro Direto atualizados."); }
 
   @ExceptionHandler(NoSuchElementException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
