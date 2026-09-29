@@ -104,7 +104,7 @@ export default function Home() {
     </section>
 
     <section className="catalog">
-      <div><span className="eyebrow">CATÁLOGO</span><h2>Opções rastreadas</h2></div>
+      <div><span className="eyebrow">CATÁLOGO</span><h2>Opções de referência</h2></div>
       <div className="table-wrap"><table>
         <thead><tr><th>Instituição / produto</th><th>Remuneração</th><th>Liquidez</th><th>FGC</th><th>Fonte</th></tr></thead>
         <tbody>{products.map(product => <tr key={product.id}>
