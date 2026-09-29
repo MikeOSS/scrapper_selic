@@ -44,7 +44,7 @@ public class RecommendationService {
     BigDecimal years = BigDecimal.valueOf(request.horizonMonths()).divide(BigDecimal.valueOf(12), 6, RoundingMode.HALF_UP);
     BigDecimal gross = request.amount().multiply(BigDecimal.ONE.add(annual.movePointLeft(2)).pow(years.intValue(), new MathContext(12))
         .multiply(BigDecimal.ONE.add(annual.movePointLeft(2).multiply(BigDecimal.valueOf(years.remainder(BigDecimal.ONE).doubleValue()))))
-        .subtract(request.amount());
+        ).subtract(request.amount());
     // IR regressivo para CDB/LC; LCI e LCA são isentas para pessoa física.
     BigDecimal taxRate = (p.type() == InvestmentType.LCI || p.type() == InvestmentType.LCA) ? BigDecimal.ZERO : taxRate(request.horizonMonths() * 30);
     BigDecimal net = gross.multiply(BigDecimal.ONE.subtract(taxRate));
