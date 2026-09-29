@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api";
+const API = process.env.NEXT_PUBLIC_API_URL;
 type Indicators = { selicAnnual: number; ipcaAnnual: number; updatedAt: string; live: boolean };
 type Product = { id: string; bank: string; name: string; type: string; rateIndex: string; annualRate: number; minimumInvestment: number; maturityDate: string; liquidityDays: number; fgcCovered: boolean; sourceUrl: string; observedAt: string; sourceStatus: string };
 type Result = { recommendation: Product; estimatedNetReturn: number; estimatedRealReturn: number; riskScore: number; rationale: string; aiExplanation: string; warnings: string[] };
@@ -14,9 +14,12 @@ export default function Home() {
   const [amount, setAmount] = useState("1000"); const [months, setMonths] = useState("12");
   const [profile, setProfile] = useState("CONSERVADOR"); const [liquidity, setLiquidity] = useState(true);
   const [result, setResult] = useState<Result | null>(null); const [loading, setLoading] = useState(false); const [error, setError] = useState("");
-  useEffect(() => { Promise.all([fetch(`${API}/market/indicators`), fetch(`${API}/products`)]).then(async ([m, p]) => { if (m.ok) setIndicators(await m.json()); if (p.ok) setProducts(await p.json()); }).catch(() => setError("Não foi possível conectar à API. Inicie o backend na porta 8080.")); }, []);
+  useEffect(() => {
+    if (!API) { setError("A API Java ainda não foi configurada nesta publicação."); return; }
+    Promise.all([fetch(`${API}/market/indicators`), fetch(`${API}/products`)]).then(async ([m, p]) => { if (m.ok) setIndicators(await m.json()); if (p.ok) setProducts(await p.json()); }).catch(() => setError("Não foi possível conectar à API de investimentos."));
+  }, []);
   async function analyze(event: FormEvent) {
-    event.preventDefault(); setLoading(true); setError("");
+    event.preventDefault(); if (!API) { setError("Configure NEXT_PUBLIC_API_URL na Vercel após hospedar o backend Java."); return; } setLoading(true); setError("");
     try { const response = await fetch(`${API}/recommendations`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ amount: Number(amount.replace(",", ".")), horizonMonths: Number(months), riskProfile: profile, liquidityNeed: liquidity }) }); const data = await response.json(); if (!response.ok) throw new Error(data.message ?? "Não foi possível analisar o investimento."); setResult(data); } catch (e) { setError(e instanceof Error ? e.message : "Erro inesperado."); } finally { setLoading(false); }
   }
   return <main>
