@@ -22,7 +22,7 @@ public class RecommendationService {
     MarketIndicators indicators = market.current();
     List<ScoredProduct> eligible = catalog.all().stream()
         .filter(p -> p.minimumInvestment().compareTo(request.amount()) <= 0)
-        .filter(p -> !request.liquidityNeed() || p.liquidityDays() <= 30)
+        .filter(p -> p.liquidityDays() <= request.requiredLiquidityDays())
         .filter(p -> ChronoUnit.MONTHS.between(LocalDate.now(), p.maturityDate()) >= request.horizonMonths())
         .map(p -> evaluate(p, request, indicators)).sorted(Comparator.comparingDouble(ScoredProduct::score).reversed()).toList();
     if (eligible.isEmpty()) throw new NoSuchElementException("Não há produto do catálogo compatível com aporte, prazo e liquidez selecionados.");
