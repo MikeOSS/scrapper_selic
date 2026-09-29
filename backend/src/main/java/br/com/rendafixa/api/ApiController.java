@@ -14,6 +14,7 @@ public class ApiController {
   public ApiController(BcbMarketService market, ProductCatalogService catalog, RecommendationService recommendations) { this.market = market; this.catalog = catalog; this.recommendations = recommendations; }
   @GetMapping("/market/indicators") public MarketIndicators indicators() { return market.current(); }
   @GetMapping("/products") public List<InvestmentProduct> products() { return catalog.all(); }
+  @GetMapping("/health") public Map<String, String> health() { return Map.of("status", "UP"); }
   @PostMapping("/recommendations") public RecommendationResponse recommend(@Valid @RequestBody RecommendationRequest request) { return recommendations.recommend(request); }
   @PostMapping("/admin/refresh") public Map<String, Object> refresh() { return Map.of("indicators", market.refresh(), "products", catalog.all().size(), "message", "Indicadores atualizados. Produtos exigem conectores autorizados por instituição."); }
 

@@ -49,8 +49,8 @@ O backend aceita `GEMINI_API_KEY` como variável do sistema; para desenvolviment
 
 ## Publicação
 
-1. Publique `backend` em um host que suporte contêineres usando o `backend/Dockerfile` e configure `GEMINI_API_KEY` exclusivamente nas variáveis secretas desse host.
-2. Na Vercel, importe este repositório e selecione `frontend` como **Root Directory**.
-3. Configure na Vercel `NEXT_PUBLIC_API_URL=https://URL-DO-BACKEND/api` e faça o deploy.
+1. No Render, escolha **New + → Blueprint**, conecte este repositório e aceite o `render.yaml`. Ele cria o serviço Docker do backend com health check em `/api/health`.
+2. Durante a criação, informe `GEMINI_API_KEY` e `CORS_ALLOWED_ORIGINS` (a URL do site na Vercel, sem barra no fim) como segredos. O Render fornece a URL pública do backend.
+3. Na Vercel, configure `NEXT_PUBLIC_API_URL=https://URL-DO-BACKEND/api` e faça o redeploy.
 
 Não use `localhost` nem a chave Gemini no frontend/Vercel: a chave fica somente no backend.

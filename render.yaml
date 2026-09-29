@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: renda-fixa-radar-api
+    runtime: docker
+    plan: free
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
