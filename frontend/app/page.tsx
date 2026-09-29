@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://renda-fixa-radar-api.onrender.com/api";
 type Indicators = { selicAnnual: number; ipcaAnnual: number; updatedAt: string; live: boolean };
 type Product = { id: string; bank: string; name: string; type: string; rateIndex: string; annualRate: number; minimumInvestment: number; maturityDate: string; liquidityDays: number; fgcCovered: boolean; sourceUrl: string; observedAt: string; sourceStatus: string };
 type Result = { recommendation: Product; estimatedNetReturn: number; estimatedRealReturn: number; riskScore: number; rationale: string; aiExplanation: string; warnings: string[] };
