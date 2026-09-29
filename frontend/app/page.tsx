@@ -23,7 +23,6 @@ export default function Home() {
     try { const response = await fetch(`${API}/recommendations`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ amount: Number(amount.replace(",", ".")), horizonMonths: Number(months), riskProfile: profile, liquidityNeed: liquidity }) }); const data = await response.json(); if (!response.ok) throw new Error(data.message ?? "Não foi possível analisar o investimento."); setResult(data); } catch (e) { setError(e instanceof Error ? e.message : "Erro inesperado."); } finally { setLoading(false); }
   }
   return <main>
-    <header><div><span className="eyebrow">RENDA FIXA RADAR</span><h1>Decida com contexto, não só com a taxa.</h1><p>SELIC e IPCA vêm do Banco Central. A comparação usa retorno líquido, liquidez, prazo, FGC e seu perfil.</p></div><div className="disclaimer">Ferramenta educacional<br/>não é recomendação de investimento</div></header>
     <section className="metrics">
       <Metric label="SELIC anual" value={indicators ? `${indicators.selicAnnual.toLocaleString("pt-BR")}%` : "—"} note={indicators?.live ? "Atualizado pelo BCB" : "Dados em cache / indisponíveis"} />
       <Metric label="IPCA (12 meses)" value={indicators ? `${indicators.ipcaAnnual.toLocaleString("pt-BR")}%` : "—"} note="Série SGS 433" />
