@@ -46,3 +46,11 @@ Abra `http://localhost:3000`. A API roda em `http://localhost:8080`.
 - `POST /api/admin/refresh` — atualiza indicadores e executa conectores habilitados
 
 O backend aceita `GEMINI_API_KEY` como variável do sistema; para desenvolvimento local também lê `backend/.env`.
+
+## Publicação
+
+1. Publique `backend` em um host que suporte contêineres usando o `backend/Dockerfile` e configure `GEMINI_API_KEY` exclusivamente nas variáveis secretas desse host.
+2. Na Vercel, importe este repositório e selecione `frontend` como **Root Directory**.
+3. Configure na Vercel `NEXT_PUBLIC_API_URL=https://URL-DO-BACKEND/api` e faça o deploy.
+
+Não use `localhost` nem a chave Gemini no frontend/Vercel: a chave fica somente no backend.
