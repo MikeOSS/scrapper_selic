@@ -12,4 +12,4 @@ services:
       - key: CORS_ALLOWED_ORIGINS
         sync: false
       - key: GEMINI_MODEL
-        value: gemini-2.0-flash
+        value: gemini-3.6-flash

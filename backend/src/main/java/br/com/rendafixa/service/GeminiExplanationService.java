@@ -14,7 +14,7 @@ import java.util.Map;
 public class GeminiExplanationService {
   private final RestClient client = RestClient.builder().build();
   @Value("${gemini.api-key:}") private String configuredKey;
-  @Value("${gemini.model:gemini-2.0-flash}") private String model;
+  @Value("${gemini.model:gemini-3.6-flash}") private String model;
 
   public String explain(RecommendationRequest request, InvestmentProduct product, String rationale, int riskScore) {
     String key = configuredKey == null || configuredKey.isBlank() ? localKey() : configuredKey;
