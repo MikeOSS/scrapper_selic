@@ -3,6 +3,8 @@ package br.com.rendafixa.service;
 import br.com.rendafixa.api.RecommendationRequest;
 import br.com.rendafixa.domain.InvestmentProduct;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 @Service
 public class GeminiExplanationService {
+  private static final Logger log = LoggerFactory.getLogger(GeminiExplanationService.class);
   private final RestClient client = RestClient.builder().build();
   @Value("${gemini.api-key:}") private String configuredKey;
   @Value("${gemini.model:gemini-3.6-flash}") private String model;
@@ -27,13 +30,14 @@ public class GeminiExplanationService {
         + ". Cite liquidez, FGC e necessidade de confirmar taxa/vencimento na fonte.";
     try {
       Map<String, Object> body = Map.of("contents", new Object[]{Map.of("parts", new Object[]{Map.of("text", prompt)})},
-          "generationConfig", Map.of("temperature", 0.2, "maxOutputTokens", 180));
+          "generationConfig", Map.of("thinkingConfig", Map.of("thinkingLevel", "minimal")));
       JsonNode result = client.post()
           .uri("https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", model)
           .header("x-goog-api-key", key).body(body).retrieve().body(JsonNode.class);
       String text = result == null ? "" : result.path("candidates").path(0).path("content").path("parts").path(0).path("text").asText();
       return text.isBlank() ? "A IA não retornou uma explicação nesta consulta." : text.trim();
-    } catch (Exception ignored) {
+    } catch (Exception exception) {
+      log.warn("Gemini explanation request failed: {}", exception.getMessage());
       return "A explicação por IA ficou indisponível; a recomendação numérica continua baseada nos critérios exibidos.";
     }
   }
