@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+**/target/
+**/node_modules*/
+**/.next/
+backend/.env
+frontend/.env.local

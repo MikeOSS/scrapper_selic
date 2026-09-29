@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: renda-fixa-radar-api
+server:
+  port: 8080
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  model: ${GEMINI_MODEL:gemini-2.0-flash}
+scraper:
+  product-source-urls: ${PRODUCT_SOURCE_URLS:}
+
